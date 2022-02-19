@@ -11,7 +11,7 @@ Tasks
 
 1. ~~Set up firebase project with hosting/firestore~~
 2. ~~Set up react with local hot change~~
-3. Import firebase into react
+3. ~~Import firebase into react~~
 4. Set up react router
 5. Login/Signup route redirect to form if user not logged in
 6. Perform login/signup with phone auth
