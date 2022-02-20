@@ -16,13 +16,11 @@ export const Home = ({user, signUserOut} : {user:User, signUserOut:()=>Promise<v
 
       const memberSnapshot = await getDocs(memberGroups);
       memberSnapshot.forEach((doc) => {
-        console.log(doc.id, ' => ', doc.data());
         tempGroups.push({id: doc.id, name:doc.data().name});
       });
 
       const adminSnapshot = await getDocs(adminGroups);
       adminSnapshot.forEach((doc) => {
-        console.log(doc.id, ' => ', doc.data());
         tempGroups.push({id: doc.id, name:doc.data().name});
       });
 

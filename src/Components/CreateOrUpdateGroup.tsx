@@ -25,24 +25,27 @@ export const CreateOrUpdateGroup = ({user} : {user:User}) => {
   }
   
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Group Name:
-      <input 
-        type="text" 
-        name="name" 
-        value={inputs.name || ""} 
-        onChange={handleChange}
-      />
-      </label>
-      <label>Member Phone Numbers (comma separated):
+    <div>
+      <button onClick={() => navigate(-1)}>Go back</button>
+      <form onSubmit={handleSubmit}>
+        <label>Group Name:
         <input 
           type="text" 
-          name="members" 
-          value={inputs.members || ""} 
+          name="name" 
+          value={inputs.name || ""} 
           onChange={handleChange}
         />
         </label>
-        <input type="submit" />
-    </form>
+        <label>Member Phone Numbers (comma separated):
+          <input 
+            type="text" 
+            name="members" 
+            value={inputs.members || ""} 
+            onChange={handleChange}
+          />
+          </label>
+          <input type="submit" />
+      </form>
+    </div>
   );
 }
