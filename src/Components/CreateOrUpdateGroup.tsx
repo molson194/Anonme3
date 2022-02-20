@@ -1,21 +1,10 @@
-import { useState, useEffect } from 'react'
-import { auth, db } from '../firebase-config';
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { db } from '../firebase-config';
+import { User } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore"; 
 
-export const CreateOrUpdateGroup = () => {
-  const [inputs, setInputs] = useState({'name':'', 'admin':'', 'members': []});
-
-  const [signedIn, setSignedIn] = useState(false)
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setSignedIn(user != null)
-      setInputs(values => ({...values, 'admin': user != null ? auth.currentUser!.uid : ''}))
-    })
-
-    return unsubscribe()
-  }, [])
+export const CreateOrUpdateGroup = ({user} : {user:User}) => {
+  const [inputs, setInputs] = useState({'name':'', 'admin':user.uid, 'members': []});
 
   const handleChange = (event : any) => {
     const name = event.target.name;
@@ -28,39 +17,29 @@ export const CreateOrUpdateGroup = () => {
 
   const handleSubmit = async (event : any) => {
     event.preventDefault();
-    console.log(auth.currentUser!.uid);
     const docRef = await addDoc(collection(db, "groups"), inputs);
     console.log("Document written with ID: ", docRef.id);
   }
   
-  if (signedIn) {
-    return (
-      <form onSubmit={handleSubmit}>
-        <label>Group Name:
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>Group Name:
+      <input 
+        type="text" 
+        name="name" 
+        value={inputs.name || ""} 
+        onChange={handleChange}
+      />
+      </label>
+      <label>Member Phone Numbers (comma separated):
         <input 
           type="text" 
-          name="name" 
-          value={inputs.name || ""} 
+          name="members" 
+          value={inputs.members || ""} 
           onChange={handleChange}
         />
         </label>
-        <label>Member Phone Numbers (comma separated):
-          <input 
-            type="text" 
-            name="members" 
-            value={inputs.members || ""} 
-            onChange={handleChange}
-          />
-          </label>
-          <input type="submit" />
-      </form>
-    );
-  } else {
-    return (
-      <div>
-        <p>User not signed in</p>
-        <Link to="login">Login</Link>
-      </div>
-    );
-  }
+        <input type="submit" />
+    </form>
+  );
 }

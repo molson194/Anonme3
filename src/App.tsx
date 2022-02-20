@@ -1,20 +1,33 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import './App.css';
 import { CreateOrUpdateGroup } from './Components/CreateOrUpdateGroup';
 import { Home } from './Components/Home'
 import { Login } from './Components/Login'
+import { useState } from 'react';
+import { auth } from './firebase-config';
+import { signOut, User } from "firebase/auth";
 
 function App() {
+  const [user, setUser] = useState<User|null>(null)
+
+  auth.onAuthStateChanged((currentUser) => {
+    setUser(currentUser)
+  })
+
+  const signUserOut = async () => {
+    await signOut(auth);
+  }
+
   return (
-    <Router>
+    <BrowserRouter>
       <div className="App">
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/createOrUpdateGroup' element={<CreateOrUpdateGroup />} />
+          <Route path='/' element={user ? <Home user={user!} signUserOut={signUserOut}/> : <Navigate to="/login"/>} />
+          <Route path='/login' element={user ? <Navigate to="/"/> : <Login />} />
+          <Route path='/createOrUpdateGroup' element={user ? <CreateOrUpdateGroup user={user!}/> : <Navigate to="/login"/>} />
         </Routes>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }
 

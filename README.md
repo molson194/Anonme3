@@ -21,11 +21,13 @@ Tasks
 10. Route to group chat and view setup (messages, input, send)
 11. Send message to database
 12. Server sent events to open chat windows when new chat arrives
-13. Tailwind styling
-14. Send text whenver new phone gets added to a group
+13. Login with other phone numbers
+14. Tailwind styling
 15. Access contacts and improve member adding
-16. Progressive web app download testing
-17. Progressive web app offline functionality
-18. Progressive web app notifications
-19. Github CI/CD
-20. React tests
+16. Firestore rules
+17. Send text whenver new phone gets added to a group
+18. Progressive web app download testing
+19. Progressive web app offline functionality
+20. Progressive web app notifications
+21. Github CI/CD
+22. React tests

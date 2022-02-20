@@ -1,9 +1,7 @@
 import { auth } from './../firebase-config';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
-  const navigate = useNavigate();
   const signIn = async () => {
     const params = {
       'size': 'invisible',
@@ -18,12 +16,7 @@ export const Login = () => {
     const appVerifier = new RecaptchaVerifier('sign-in-button', params, auth);
     const confirmation = await signInWithPhoneNumber(auth, '+13035147424', appVerifier);
     const input = String(prompt());
-    const result = await confirmation.confirm(input);
-
-    if (result.user != null)
-    {
-      navigate('/')
-    }
+    await confirmation.confirm(input);
   }
 
   return (
