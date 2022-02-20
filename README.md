@@ -16,7 +16,7 @@ Tasks
 5. ~~Login/Signup route redirect to form if user not logged in~~
 6. ~~Perform login/signup with phone auth~~
 7. ~~Create new group route to form~~
-8. Create new group in database
+8. ~~Create new group in database~~
 9. Display groups on home page for logged in user
 10. Route to group chat and view setup (messages, input, send)
 11. Send message to database

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { auth } from '../firebase-config';
+import { auth, db } from '../firebase-config';
 import { Link } from 'react-router-dom'
+import { collection, addDoc } from "firebase/firestore"; 
 
 export const CreateOrUpdateGroup = () => {
   const [inputs, setInputs] = useState({'name':'', 'admin':'', 'members': []});
@@ -25,11 +26,13 @@ export const CreateOrUpdateGroup = () => {
     setInputs(values => ({...values, [name]: value}))
   }
 
-  const handleSubmit = (event : any) => {
+  const handleSubmit = async (event : any) => {
     event.preventDefault();
     console.log(auth.currentUser!.uid);
-    alert(`${inputs.admin} ${inputs.members} ${inputs.name}`);
+    const docRef = await addDoc(collection(db, "groups"), inputs);
+    console.log("Document written with ID: ", docRef.id);
   }
+  
   if (signedIn) {
     return (
       <form onSubmit={handleSubmit}>
