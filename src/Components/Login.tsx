@@ -1,13 +1,13 @@
 import { auth } from './../firebase-config';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
+  const navigate = useNavigate();
   const signIn = async () => {
-    console.log(auth);
     const params = {
       'size': 'invisible',
       'callback': (response : any) => {
-        console.log(response)
         // reCAPTCHA solved, allow signInWithPhoneNumber.
       },
       'expired-callback': () => {
@@ -17,10 +17,13 @@ export const Login = () => {
 
     const appVerifier = new RecaptchaVerifier('sign-in-button', params, auth);
     const confirmation = await signInWithPhoneNumber(auth, '+13035147424', appVerifier);
-    console.log(confirmation);
     const input = String(prompt());
     const result = await confirmation.confirm(input);
-    console.log(result);
+
+    if (result.user != null)
+    {
+      navigate('/')
+    }
   }
 
   return (
