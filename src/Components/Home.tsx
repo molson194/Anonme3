@@ -27,6 +27,7 @@ export const Home = () => {
       <div>
         <p>User signed in</p>
         <button onClick={signUserOut}>Sign Out</button>
+        <Link to="createOrUpdateGroup">Create Group</Link>
       </div>
     );
   } else {
