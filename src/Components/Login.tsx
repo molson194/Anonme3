@@ -1,7 +1,17 @@
 import { auth } from './../firebase-config';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
 
-export const Login = () => {
+export const Login = ({signedIn} : {signedIn:boolean}) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (signedIn) {
+      navigate(-1)
+    }
+  }, [signedIn, navigate])
+
   const signIn = async () => {
     const params = {
       'size': 'invisible',

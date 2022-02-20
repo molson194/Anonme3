@@ -23,7 +23,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path='/' element={user ? <Home user={user!} signUserOut={signUserOut}/> : <Navigate to="/login"/>} />
-          <Route path='/login' element={user ? <Navigate to="/"/> : <Login />} />
+          <Route path='/login' element={<Login signedIn={user != null}/>} />
           <Route path='/createOrUpdateGroup' element={user ? <CreateOrUpdateGroup user={user!}/> : <Navigate to="/login"/>} />
         </Routes>
       </div>
