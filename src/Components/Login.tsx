@@ -1,10 +1,14 @@
 import { auth } from './../firebase-config';
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { ConfirmationResult, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { useNavigate } from "react-router-dom";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const Login = ({signedIn} : {signedIn:boolean}) => {
   const navigate = useNavigate();
+
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [confirmation, setConfirmation] = useState<ConfirmationResult>()
+  const [inputCode, setInputCode] = useState('')
 
   useEffect(() => {
     if (signedIn) {
@@ -12,7 +16,18 @@ export const Login = ({signedIn} : {signedIn:boolean}) => {
     }
   }, [signedIn, navigate])
 
-  const signIn = async () => {
+  const updatePhoneNumber = (event : any) => {
+    var value = event.target.value;
+    setPhoneNumber(value)
+  }
+
+  const updateInputCode = (event : any) => {
+    var value = event.target.value;
+    setInputCode(value)
+  }
+
+  const submitPhoneNumber = async (event : any) => {
+    event.preventDefault();
     const params = {
       'size': 'invisible',
       'callback': (response : any) => {
@@ -24,15 +39,44 @@ export const Login = ({signedIn} : {signedIn:boolean}) => {
     };
 
     const appVerifier = new RecaptchaVerifier('sign-in-button', params, auth);
-    const confirmation = await signInWithPhoneNumber(auth, '+13035147424', appVerifier);
-    const input = String(prompt());
-    await confirmation.confirm(input);
+    const confirmation = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
+    setConfirmation(confirmation)
+  }
+
+  const submitInputCode = async (event : any) => {
+    event.preventDefault();
+    if (confirmation != null) {
+      await confirmation.confirm(inputCode);
+    } else {
+      console.log("Submit phone number before input code.")
+    }
   }
 
   return (
     <div>
       <p>Login</p>
-      <button id='sign-in-button' onClick={signIn}>Sign In</button>
+      <form onSubmit={submitPhoneNumber}>
+        <label>Phone number: 
+        <input 
+          type="text" 
+          name="phoneNumber" 
+          value={phoneNumber || ""} 
+          onChange={updatePhoneNumber}
+        />
+        </label>
+          <input id='sign-in-button' type="submit" />
+      </form>
+      <form onSubmit={submitInputCode}>
+        <label>Input Code: 
+        <input 
+          type="text" 
+          name="inputCode" 
+          value={inputCode || ""} 
+          onChange={updateInputCode}
+        />
+        </label>
+          <input type="submit" />
+      </form>
     </div>
   )
 }
