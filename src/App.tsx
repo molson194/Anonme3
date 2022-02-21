@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import './App.css';
-import { CreateOrUpdateGroup } from './Components/CreateOrUpdateGroup';
+import { CreateGroup } from './Components/CreateGroup';
 import { Home } from './Components/Home'
 import { Login } from './Components/Login'
 import { Group } from './Components/Group'
@@ -25,7 +25,7 @@ function App() {
         <Routes>
           <Route path='/' element={user ? <Home user={user!} signUserOut={signUserOut}/> : <Navigate to="/login"/>} />
           <Route path='/login' element={<Login signedIn={user != null}/>} />
-          <Route path='/createOrUpdateGroup' element={user ? <CreateOrUpdateGroup user={user!}/> : <Navigate to="/login"/>} />
+          <Route path='/createGroup' element={user ? <CreateGroup user={user!}/> : <Navigate to="/login"/>} />
           <Route path='/groups/:id' element={user ? <Group user={user!}/> : <Navigate to="/login"/>} />
         </Routes>
       </div>
