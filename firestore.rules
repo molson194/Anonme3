@@ -1,9 +1,20 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if
-          request.time < timestamp.date(2022, 3, 20);
+    match /groups/{groupId} {
+      allow read: if request.auth != null
+                  && (request.auth.uid == resource.data.admin || request.auth.token.phone_number in resource.data.members);
+
+      allow write, update: if request.auth != null && request.auth.uid == resource.data.admin;
+
+      function getGroupData() {
+        return get(/databases/$(database)/documents/groups/$(groupId)).data
+      }
+
+      match /messages/{messageId} {
+        allow read,write: if request.auth != null
+                          && (request.auth.uid == getGroupData().admin || request.auth.token.phone_number in getGroupData().members);
+      }
     }
   }
 }

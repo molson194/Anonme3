@@ -24,7 +24,7 @@ Tasks
 13. ~~Login with other phone numbers~~
 14. ~~Tailwind styling~~
 15. ~~Access contacts and improve member adding~~
-16. Firestore rules
+16. ~~Firestore rules~~
 17. Send text whenver new phone gets added to a group
 18. Progressive web app download testing
 19. Progressive web app offline functionality
