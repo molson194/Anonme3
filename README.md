@@ -20,7 +20,7 @@ Tasks
 9. ~~Display groups on home page for logged in user~~
 10. ~~Route to group chat and view setup (messages, input, send)~~
 11. ~~Send message to database~~
-12. Server sent events to open chat windows when new chat arrives
+12. ~~Server sent events to open chat windows when new chat arrives~~
 13. Login with other phone numbers
 14. Tailwind styling
 15. Access contacts and improve member adding

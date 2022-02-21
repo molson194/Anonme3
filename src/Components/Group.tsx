@@ -2,11 +2,11 @@ import { User } from "firebase/auth";
 import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import { db } from '../firebase-config';
-import { collection, query, doc, getDoc, getDocs, orderBy, addDoc } from "firebase/firestore";
+import { collection, query, doc, getDoc, orderBy, addDoc, onSnapshot } from "firebase/firestore";
 
 export const Group = ({user} : {user:User}) => {
   const navigate = useNavigate();
-  
+
   const path = window.location.pathname
   const groupId = path.substring(path.lastIndexOf('/') + 1)
 
@@ -25,19 +25,18 @@ export const Group = ({user} : {user:User}) => {
       }
     }
 
-    async function getMessages() {
-      const tempMessages:string[] = []
-      const messagesQuery = query(collection(db, `groups/${groupId}/messages`), orderBy("time")); // TODO: order by
-      const messagesSnapshot = await getDocs(messagesQuery);
-      messagesSnapshot.forEach((doc) => {
-        tempMessages.push(doc.data().message);
-      });
-
-      setMessages(tempMessages)
-    }
-
     getGroupName()
-    getMessages()
+  }, [groupId])
+
+  useEffect(() => {
+    const messagesQuery = query(collection(db, `groups/${groupId}/messages`), orderBy("time"));
+    const unsubscribe = onSnapshot(messagesQuery, (messagesSnapshot) => {
+      console.log("getting subscribed messages")
+      const messages = messagesSnapshot.docs.map(doc => doc.data().message);
+      setMessages(messages)
+    });
+    
+    return () => unsubscribe();
   }, [groupId])
 
   const updateNewMessage = (event : any) => {
@@ -50,6 +49,7 @@ export const Group = ({user} : {user:User}) => {
     const time = new Date();
     const docRef = await addDoc(collection(db, `groups/${groupId}/messages`), {'message':newMessage, 'time':time});
     console.log("Document written with ID: ", docRef.id);
+    setNewMessage('')
   }
 
   return (
