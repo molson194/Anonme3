@@ -54,8 +54,8 @@ export const Group = ({user} : {user:User}) => {
 
   return (
     <div>
-      <h1>Group {groupName}</h1>
-      <button onClick={() => navigate(-1)}>Go back</button>
+      <h1 className="text-3xl font-bold underline">Group {groupName}</h1>
+      <button className="btn btn-blue" onClick={() => navigate(-1)}>Go back</button>
       <div>
         {messages.map((message, index) => (
           <p key={index}>{message}</p>
@@ -64,13 +64,14 @@ export const Group = ({user} : {user:User}) => {
       <form onSubmit={handleSubmit}>
         <label>Send Message:
         <input 
+          className="input-field"
           type="text" 
           name="newMessage" 
           value={newMessage || ""} 
           onChange={updateNewMessage}
         />
         </label>
-          <input type="submit" />
+          <input className="btn btn-blue" type="submit" />
       </form>
     </div>
   )

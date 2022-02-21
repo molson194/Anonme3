@@ -56,8 +56,9 @@ export const Login = ({signedIn} : {signedIn:boolean}) => {
     <div>
       <p>Login</p>
       <form onSubmit={submitPhoneNumber}>
-        <label>Phone number: 
+        <label className="input-label">Phone number: 
         <input 
+          className="input-field"
           type="text" 
           name="phoneNumber" 
           value={phoneNumber || ""} 
@@ -67,8 +68,9 @@ export const Login = ({signedIn} : {signedIn:boolean}) => {
           <input id='sign-in-button' type="submit" />
       </form>
       <form onSubmit={submitInputCode}>
-        <label>Input Code: 
+        <label className="input-label">Input Code: 
         <input 
+          className="input-field"
           type="text" 
           name="inputCode" 
           value={inputCode || ""} 

@@ -33,10 +33,10 @@ export const Home = ({user, signUserOut} : {user:User, signUserOut:()=>Promise<v
   return (
     <div>
       <p>User signed in: {user.uid}</p>
-      <button onClick={signUserOut}>Sign Out</button>
-      <Link to="createOrUpdateGroup">Create Group</Link>
+      <button className="btn btn-blue" onClick={signUserOut}>Sign Out</button>
+      <Link className="btn btn-blue" to="createOrUpdateGroup">Create Group</Link>
       {groups.map((group) => (
-        <Link key={group.id} to={`groups/${group.id}`}>{group.name}</Link>
+        <Link className="btn btn-blue" key={group.id} to={`groups/${group.id}`}>{group.name}</Link>
       ))}
     </div>
   );
