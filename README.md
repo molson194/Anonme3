@@ -30,12 +30,11 @@ Tasks
 Pivot:
 * ~~Fix create new group database rules~~
 * ~~Create group with code and share link with code~~
-* Login creates groupMemberships/uid
+* ~~App name and title~~
+* ~~Remove updateGroup/groupDetails page~~
 * Add to groupMememberships when joined with code
-* Remove updateGroup/groupDetails page
 * Caching firebase (only update new messages/groups)
 * Styling
-* App name and title
 
 18. Progressive web app offline functionality
 19. Progressive web app notifications
