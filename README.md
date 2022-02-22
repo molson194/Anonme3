@@ -24,10 +24,20 @@ Tasks
 13. ~~Login with other phone numbers~~
 14. ~~Tailwind styling~~
 15. ~~Access contacts and improve member adding~~
-16. ~~Firestore rules~~
-17. Send text whenver new phone gets added to a group
-18. Progressive web app download testing
-19. Progressive web app offline functionality
-20. Progressive web app notifications
-21. Github CI/CD (without firebase-config emulators)
-22. React tests
+16. ~~Firestore rules~~ 
+17. ~~Progressive web app download testing~~
+
+Pivot:
+* ~~Fix create new group database rules~~
+* Create group with code and share link with code
+* Login creates groupMemberships/uid
+* Add to groupMememberships when joined
+* Remove updateGroup/groupDetails page
+* Caching firebase (only update new messages/groups)
+* Styling
+* App name and title
+
+18. Progressive web app offline functionality
+19. Progressive web app notifications
+20. Github CI/CD (without firebase-config emulators)
+21. React tests
