@@ -2,23 +2,27 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /groups/{groupId} {
-      allow read: if request.auth != null
-                  && (request.auth.uid == resource.data.admin || request.auth.token.phone_number in resource.data.members);
+      allow read, write: if request.auth != null;
 
-      allow write: if request.auth != null
-                   && request.auth.uid == request.resource.data.admin;
-
-      allow update: if request.auth != null
-                    && request.auth.uid == request.resource.data.admin
-                    && request.auth.uid == resource.data.admin;
-
-      function getGroupData() {
-        return get(/databases/$(database)/documents/groups/$(groupId)).data
-      }
+      allow update: if false;
 
       match /messages/{messageId} {
         allow read,write: if request.auth != null
-                          && (request.auth.uid == getGroupData().admin || request.auth.token.phone_number in getGroupData().members);
+                          && get(/databases/$(database)/documents/groupMemberships/$(request.auth.uid)/groups/$(groupId)) != null;
+      }
+    }
+
+    match /groupMemberships/{uid} {
+      allow read, write, update: if request.auth != null
+                                 && request.auth.uid == uid;
+      
+      match /groups/{groupId} {
+        allow read: if request.auth != null
+                    && request.auth.uid == uid;
+
+        allow write: if request.auth != null
+                     && request.auth.uid == uid
+                     && get(/databases/$(database)/documents/groups/$(groupId)).data.code == request.resource.data.code;
       }
     }
   }

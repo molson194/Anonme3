@@ -32,11 +32,11 @@ Pivot:
 * ~~Create group with code and share link with code~~
 * ~~App name and title~~
 * ~~Remove updateGroup/groupDetails page~~
-* Add to groupMememberships when joined with code
-* Caching firebase (only update new messages/groups)
+* ~~Add to groupMememberships when joined with code~~
+* ~~Auto add creator as member~~
 * Styling
 
-18. Progressive web app offline functionality
+18. Progressive web app offline functionality and firebase caching (only update new messages/groups)
 19. Progressive web app notifications
 20. Github CI/CD (without firebase-config emulators)
 21. React tests

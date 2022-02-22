@@ -2,7 +2,7 @@ import { User } from "firebase/auth";
 import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import { db } from '../firebase-config';
-import { collection, query, doc, getDoc, orderBy, addDoc, onSnapshot } from "firebase/firestore";
+import { collection, query, doc, getDoc, orderBy, addDoc, onSnapshot, setDoc } from "firebase/firestore";
 
 export const Group = ({user} : {user:User}) => {
   const navigate = useNavigate();
@@ -10,6 +10,9 @@ export const Group = ({user} : {user:User}) => {
   const path = window.location.pathname
   const groupId = path.substring(path.lastIndexOf('/') + 1)
 
+  const [loading, setLoading] = useState(true)
+  const [userBelongs, setUserBelongs] = useState(false)
+  const [accessCode, setAccessCode] = useState('')
   const [groupName, setGroupName] = useState('')
   const [messages, setMessages] = useState<string[]>([])
   const [newMessage, setNewMessage] = useState('')
@@ -20,31 +23,53 @@ export const Group = ({user} : {user:User}) => {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setGroupName(docSnap.data().name);
+        console.log(docSnap.data().name)
       } else {
         console.log("No such document!");
       }
     }
 
+    async function getUserBelongs() {
+      const docRef = doc(db, `groupMemberships/${user.uid}/groups/${groupId}`);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setUserBelongs(true)
+      } else {
+        console.log("User does not belong to group.");
+        setLoading(false)
+      }
+    }
+
     getGroupName()
-  }, [groupId])
+    getUserBelongs()
+  }, [groupId, user])
 
   useEffect(() => {
-    const messagesQuery = query(collection(db, `groups/${groupId}/messages`), orderBy("time"));
-    const unsubscribe = onSnapshot(messagesQuery, (messagesSnapshot) => {
-      console.log("getting subscribed messages")
-      const messages = messagesSnapshot.docs.map(doc => doc.data().message);
-      setMessages(messages)
-    });
-    
-    return () => unsubscribe();
-  }, [groupId])
+    if (userBelongs)
+    {
+      const messagesQuery = query(collection(db, `groups/${groupId}/messages`), orderBy("time"));
+      const unsubscribe = onSnapshot(messagesQuery, (messagesSnapshot) => {
+        console.log("getting subscribed messages")
+        const messages = messagesSnapshot.docs.map(doc => doc.data().message);
+        setMessages(messages)
+        setLoading(false)
+      });
+      
+      return () => unsubscribe();
+    }
+  }, [groupId, userBelongs])
 
   const updateNewMessage = (event : any) => {
     var value = event.target.value;
     setNewMessage(value)
   }
 
-  const handleSubmit = async (event : any) => {
+  const updateAccessCode = (event : any) => {
+    var value = event.target.value;
+    setAccessCode(value)
+  }
+
+  const submitMessage = async (event : any) => {
     event.preventDefault();
     const time = new Date();
     const docRef = await addDoc(collection(db, `groups/${groupId}/messages`), {'message':newMessage, 'time':time});
@@ -52,8 +77,40 @@ export const Group = ({user} : {user:User}) => {
     setNewMessage('')
   }
 
+  const submitAccessCode = async (event : any) => {
+    event.preventDefault();
+    setLoading(true)
+    await setDoc(doc(db, `groupMemberships/${user.uid}/groups/${groupId}`), {'code':accessCode, 'name':groupName});
+    console.log("Access code accepted");
+    setUserBelongs(true)
+  }
+
   const leaveGroup = () => {
     // TODO
+  }
+
+  if (loading){
+    return (
+      <h1>Loading...</h1>
+    );
+  }
+
+  if (!userBelongs) {
+    return (
+      <div>
+        <button className="btn btn-blue" onClick={() => navigate('/')}>Back</button>
+        <label>Group access code:
+        <input 
+          className="input-field"
+          type="text" 
+          name="accessCode" 
+          value={accessCode || ""} 
+          onChange={updateAccessCode}
+        />
+        </label>
+        <button className="btn btn-blue" onClick={submitAccessCode}>Submit</button>
+      </div>
+    );
   }
 
   return (
@@ -75,7 +132,7 @@ export const Group = ({user} : {user:User}) => {
         onChange={updateNewMessage}
       />
       </label>
-      <button className="btn btn-blue" onClick={handleSubmit}>Submit</button>
+      <button className="btn btn-blue" onClick={submitMessage}>Submit</button>
     </div>
   )
 }

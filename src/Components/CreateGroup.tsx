@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { db } from '../firebase-config';
 import { User } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore"; 
+import { collection, addDoc, doc, setDoc } from "firebase/firestore"; 
 import { useNavigate } from "react-router-dom";
 
 export const CreateGroup = ({user} : {user:User}) => {
@@ -34,6 +34,7 @@ export const CreateGroup = ({user} : {user:User}) => {
     event.preventDefault();
     const docRef = await addDoc(collection(db, "groups"), inputs);
     console.log("Document written with ID: ", docRef.id);
+    await setDoc(doc(db, `groupMemberships/${user.uid}/groups/${docRef.id}`), {'code':inputs.code, 'name':inputs.name}, {merge: true});
     navigate(`/groups/${docRef.id}`)
   }
   

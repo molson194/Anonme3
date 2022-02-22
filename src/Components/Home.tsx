@@ -2,16 +2,16 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { User } from "firebase/auth";
 import { db } from '../firebase-config';
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, getDocs } from "firebase/firestore";
 
 export const Home = ({user, signUserOut} : {user:User, signUserOut:()=>Promise<void>}) => {
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(true)
   const [groups, setGroups] = useState<{id:string,name:string}[]>([])
 
   useEffect(() => {
     async function getGroups() {
-      const memberGroups = query(collection(db, "groups"), where("members", "array-contains", user.phoneNumber!));
-      const adminGroups = query(collection(db, "groups"), where("admin", "==", user.uid));
+      const memberGroups = query(collection(db, `groupMemberships/${user.uid}/groups`));
       const tempGroups:{id:string,name:string}[] = [];
 
       const memberSnapshot = await getDocs(memberGroups);
@@ -19,16 +19,18 @@ export const Home = ({user, signUserOut} : {user:User, signUserOut:()=>Promise<v
         tempGroups.push({id: doc.id, name:doc.data().name});
       });
 
-      const adminSnapshot = await getDocs(adminGroups);
-      adminSnapshot.forEach((doc) => {
-        tempGroups.push({id: doc.id, name:doc.data().name});
-      });
-
       setGroups(tempGroups);
+      setLoading(false)
     }
 
     getGroups()
   }, [user])
+
+  if (loading){
+    return (
+      <h1>Loading...</h1>
+    );
+  }
 
   return (
     <div>

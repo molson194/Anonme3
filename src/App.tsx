@@ -4,14 +4,19 @@ import { Home } from './Components/Home'
 import { Login } from './Components/Login'
 import { Group } from './Components/Group'
 import { useState } from 'react';
-import { auth } from './firebase-config';
+import { auth, db } from './firebase-config';
 import { signOut, User } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
 
 function App() {
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<User|null>(null)
 
-  auth.onAuthStateChanged((currentUser) => {
+  auth.onAuthStateChanged(async (currentUser) => {
+    if (currentUser) {
+      await setDoc(doc(db, `groupMemberships/${currentUser!.uid}`),{},{merge: true})
+    }
+    
     setUser(currentUser)
     setLoading(false)
   })
