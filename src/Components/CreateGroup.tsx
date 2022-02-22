@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 export const CreateGroup = ({user} : {user:User}) => {
   const navigate = useNavigate();
-  const [inputs, setInputs] = useState<{name:string, admin:string, members:string[]}>({'name':'', 'admin':user.uid, 'members': []});
-  const [member, setMember] = useState('');
+  const [inputs, setInputs] = useState({'name':'', 'admin':user.uid, 'code': ''});
 
   /* Enable when browsers support contact picking
   const contactApiSupported = 'contacts' in navigator;
@@ -25,60 +24,41 @@ export const CreateGroup = ({user} : {user:User}) => {
     }
   } */
 
-  const changeGroupName = (event : any) => {
+  const handleChange = (event : any) => {
+    const name = event.target.name;
     const value = event.target.value;
-    setInputs(values => ({...values, 'name': value}))
-  }
-
-  const changeMember = (event : any) => {
-    const value = event.target.value;
-    setMember(value)
+    setInputs(values => ({...values, [name]: value}))
   }
 
   const handleSubmit = async (event : any) => {
     event.preventDefault();
     const docRef = await addDoc(collection(db, "groups"), inputs);
     console.log("Document written with ID: ", docRef.id);
-    navigate('/')
-  }
-
-  const addMember = () => {
-    setInputs(values => ({...values, 'members': [...inputs.members, member]}))
-    setMember('')
-  }
-
-  const removeMember = (index: number) => {
-    const filteredMembers = inputs.members.filter((member, i) => i !== index)
-    setInputs(values => ({...values, 'members': filteredMembers}))
+    navigate(`/groups/${docRef.id}`)
   }
   
   return (
     <div>
-      <button className="btn btn-blue" onClick={() => navigate(-1)}>Go back</button>
-      <button className="btn btn-blue" onClick={handleSubmit}>Save</button>
+      <button className="btn btn-blue" onClick={() => navigate('/')}>Back</button>
+      <button className="btn btn-blue" onClick={handleSubmit}>Create</button>
       <label className="input-label">Group Name:
-      <input
-        className="input-field"
-        type="text" 
-        value={inputs.name || ""} 
-        onChange={changeGroupName}
-      />
+        <input
+          className="input-field"
+          type="text"
+          name="name"
+          value={inputs.name || ""} 
+          onChange={handleChange}
+        />
       </label>
-      <label className="input-label">Member Phone Number:
+      <label className="input-label">Access code:
         <input
           className="input-field"
           type="text" 
-          value={member || ""} 
-          onChange={changeMember}
+          name="code"
+          value={inputs.code || ""} 
+          onChange={handleChange}
         />
-        <button className="btn btn-blue" onClick={addMember}>AddMember</button>
       </label>
-      {inputs.members.map((member, index) => (
-          <div key={index}>
-            <p>{member}</p>
-            <button className="btn btn-blue" onClick={() => removeMember(index)}>Remove Member</button>
-          </div>
-        ))}
     </div>
   );
 }

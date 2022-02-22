@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { User } from "firebase/auth";
 import { db } from '../firebase-config';
 import { collection, query, where, getDocs } from "firebase/firestore";
 
 export const Home = ({user, signUserOut} : {user:User, signUserOut:()=>Promise<void>}) => {
-  
+  const navigate = useNavigate()
   const [groups, setGroups] = useState<{id:string,name:string}[]>([])
 
   useEffect(() => {
@@ -34,9 +34,9 @@ export const Home = ({user, signUserOut} : {user:User, signUserOut:()=>Promise<v
     <div>
       <p>User signed in: {user.uid}</p>
       <button className="btn btn-blue" onClick={signUserOut}>Sign Out</button>
-      <Link className="btn btn-blue" to="createGroup">Create Group</Link>
+      <button className="btn btn-blue" onClick={() => navigate("/createGroup")}>Create Group</button>
       {groups.map((group) => (
-        <Link className="btn btn-blue" key={group.id} to={`groups/${group.id}`}>{group.name}</Link>
+        <button className="btn btn-blue" key={group.id} onClick={() => navigate(`groups/${group.id}`)}>{group.name}</button>
       ))}
     </div>
   );

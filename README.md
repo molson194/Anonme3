@@ -29,9 +29,9 @@ Tasks
 
 Pivot:
 * ~~Fix create new group database rules~~
-* Create group with code and share link with code
+* ~~Create group with code and share link with code~~
 * Login creates groupMemberships/uid
-* Add to groupMememberships when joined
+* Add to groupMememberships when joined with code
 * Remove updateGroup/groupDetails page
 * Caching firebase (only update new messages/groups)
 * Styling

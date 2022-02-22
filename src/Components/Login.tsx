@@ -54,31 +54,27 @@ export const Login = ({signedIn} : {signedIn:boolean}) => {
 
   return (
     <div>
-      <p>Login</p>
-      <form onSubmit={submitPhoneNumber}>
-        <label className="input-label">Phone number: 
-          <input 
-            className="input-field"
-            type="text" 
-            name="phoneNumber" 
-            value={phoneNumber || ""} 
-            onChange={updatePhoneNumber}
-          />
-        </label>
-        <input className="btn btn-blue" id='sign-in-button' type="submit" />
-      </form>
-      <form onSubmit={submitInputCode}>
-        <label className="input-label">Input Code: 
-          <input 
-            className="input-field"
-            type="text" 
-            name="inputCode" 
-            value={inputCode || ""} 
-            onChange={updateInputCode}
-          />
-        </label>
-        <input className="btn btn-blue" type="submit" />
-      </form>
+      <p>Login/Signup</p>
+      <label className="input-label">Phone number: 
+        <input 
+          className="input-field"
+          type="text" 
+          name="phoneNumber" 
+          value={phoneNumber || ""} 
+          onChange={updatePhoneNumber}
+        />
+      </label>
+      <button className="btn btn-blue" id='sign-in-button' onClick={submitPhoneNumber}>Send Verification</button>
+      <label className="input-label">Input Code: 
+        <input 
+          className="input-field"
+          type="text" 
+          name="inputCode" 
+          value={inputCode || ""} 
+          onChange={updateInputCode}
+        />
+      </label>
+      <button className="btn btn-blue" onClick={submitInputCode}>Submit Verification</button>
     </div>
   )
 }

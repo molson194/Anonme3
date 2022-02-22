@@ -8,14 +8,22 @@ import { auth } from './firebase-config';
 import { signOut, User } from "firebase/auth";
 
 function App() {
+  const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<User|null>(null)
 
   auth.onAuthStateChanged((currentUser) => {
     setUser(currentUser)
+    setLoading(false)
   })
 
   const signUserOut = async () => {
     await signOut(auth);
+  }
+
+  if (loading) {
+    return (
+      <h1>Loading...</h1>
+    );
   }
 
   return (
