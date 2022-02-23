@@ -2,6 +2,9 @@ import { auth } from './../firebase-config';
 import { ConfirmationResult, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
+import Container from 'react-bootstrap/Container'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 export const Login = ({signedIn} : {signedIn:boolean}) => {
   const navigate = useNavigate();
@@ -52,29 +55,45 @@ export const Login = ({signedIn} : {signedIn:boolean}) => {
     }
   }
 
-  return (
-    <div>
-      <p>Login/Signup</p>
-      <label className="input-label">Phone number: 
-        <input 
-          className="input-field"
-          type="text" 
-          name="phoneNumber" 
-          value={phoneNumber || ""} 
-          onChange={updatePhoneNumber}
-        />
-      </label>
-      <button className="btn btn-blue" id='sign-in-button' onClick={submitPhoneNumber}>Send Verification</button>
-      <label className="input-label">Input Code: 
-        <input 
-          className="input-field"
-          type="text" 
-          name="inputCode" 
-          value={inputCode || ""} 
-          onChange={updateInputCode}
-        />
-      </label>
-      <button className="btn btn-blue" onClick={submitInputCode}>Submit Verification</button>
-    </div>
-  )
+  if (confirmation == null) {
+    return (
+      <div>
+        <Container>
+          <h1 className="mt-3">Login/Signup</h1>
+          <Form>
+            <Form.Group>
+              <Form.Label>Phone number</Form.Label>
+              <Form.Control
+                type="tel"
+                value={phoneNumber}
+                onChange={updatePhoneNumber}
+                placeholder="+19876543210"
+              />
+              <Button className="mt-3" variant="primary" id='sign-in-button' onClick={submitPhoneNumber}>Send Verification</Button>
+            </Form.Group>
+          </Form>
+        </Container>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Container>
+          <h1 className="mt-3">Login/Signup</h1>
+          <Form>
+            <Form.Group>
+              <Form.Label>Phone Verification Code</Form.Label>
+              <Form.Control
+                type="text"
+                value={inputCode}
+                onChange={updateInputCode}
+                placeholder="123456"
+              />
+              <Button className="mt-3" variant="success" onClick={submitInputCode}>Submit Verification</Button>
+            </Form.Group>
+          </Form>
+        </Container>
+      </div>
+    )
+  }
 }

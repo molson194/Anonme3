@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { auth, db } from './firebase-config';
 import { signOut, User } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
+import Spinner from 'react-bootstrap/Spinner'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -27,7 +29,7 @@ function App() {
 
   if (loading) {
     return (
-      <h1>Loading...</h1>
+      <Spinner animation="border" />
     );
   }
 

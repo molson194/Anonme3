@@ -3,6 +3,9 @@ import { db } from '../firebase-config';
 import { User } from "firebase/auth";
 import { collection, addDoc, doc, setDoc } from "firebase/firestore"; 
 import { useNavigate } from "react-router-dom";
+import Container from 'react-bootstrap/Container'
+import Navbar from 'react-bootstrap/Navbar'
+import Form from 'react-bootstrap/Form'
 
 export const CreateGroup = ({user} : {user:User}) => {
   const navigate = useNavigate();
@@ -39,27 +42,35 @@ export const CreateGroup = ({user} : {user:User}) => {
   }
   
   return (
-    <div>
-      <button className="btn btn-blue" onClick={() => navigate('/')}>Back</button>
-      <button className="btn btn-blue" onClick={handleSubmit}>Create</button>
-      <label className="input-label">Group Name:
-        <input
-          className="input-field"
-          type="text"
-          name="name"
-          value={inputs.name || ""} 
-          onChange={handleChange}
-        />
-      </label>
-      <label className="input-label">Access code:
-        <input
-          className="input-field"
-          type="text" 
-          name="code"
-          value={inputs.code || ""} 
-          onChange={handleChange}
-        />
-      </label>
-    </div>
+    <Container fluid>
+      <Navbar bg="dark" expand="lg" fixed="top">
+        <button className="btn btn-outline-primary" onClick={() => navigate('/')}>Back</button>
+        <button className="btn btn-outline-primary ms-auto" onClick={handleSubmit}>Create</button>
+      </Navbar>
+      <Container style={{paddingTop:'70px'}}>
+        <Form>
+          <Form.Group>
+            <Form.Label>Group Name</Form.Label>
+            <Form.Control
+              type="text"
+              name="name"
+              value={inputs.name}
+              onChange={handleChange}
+              placeholder="Group name..."
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Access Code</Form.Label>
+            <Form.Control
+              type="text"
+              name="code"
+              value={inputs.code}
+              onChange={handleChange}
+              placeholder="Access Code..."
+            />
+          </Form.Group>
+        </Form>
+      </Container>
+    </Container>
   );
 }

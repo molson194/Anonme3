@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { User } from "firebase/auth";
 import { db } from '../firebase-config';
 import { collection, query, getDocs } from "firebase/firestore";
+import Spinner from 'react-bootstrap/Spinner'
+import Container from 'react-bootstrap/Container'
+import Navbar from 'react-bootstrap/Navbar'
+import Button from 'react-bootstrap/Button'
 
 export const Home = ({user, signUserOut} : {user:User, signUserOut:()=>Promise<void>}) => {
   const navigate = useNavigate()
@@ -28,18 +32,22 @@ export const Home = ({user, signUserOut} : {user:User, signUserOut:()=>Promise<v
 
   if (loading){
     return (
-      <h1>Loading...</h1>
+      <Spinner animation="border" />
     );
   }
 
   return (
-    <div>
-      <p>User signed in: {user.uid}</p>
-      <button className="btn btn-blue" onClick={signUserOut}>Sign Out</button>
-      <button className="btn btn-blue" onClick={() => navigate("/createGroup")}>Create Group</button>
-      {groups.map((group) => (
-        <button className="btn btn-blue" key={group.id} onClick={() => navigate(`groups/${group.id}`)}>{group.name}</button>
-      ))}
-    </div>
+    <Container fluid>
+      <Navbar bg="dark" expand="lg" fixed="top">
+        <button className="btn btn-outline-primary" onClick={() => navigate("/createGroup")}>New Group</button>
+        <Navbar.Brand style={{color:'white'}} className="mx-auto">Anonme</Navbar.Brand>
+        <button className="btn btn-outline-primary ms-0" onClick={signUserOut}>Sign Out</button>
+      </Navbar>
+      <div className="d-grid gap-2" style={{paddingTop:'70px'}}>
+        {groups.map((group) => (
+          <Button variant="outline-primary" size="lg" key={group.id} onClick={() => navigate(`groups/${group.id}`)}>{group.name}</Button>
+        ))}
+      </div>
+    </Container>
   );
 }

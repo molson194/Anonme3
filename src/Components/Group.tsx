@@ -3,6 +3,11 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import { db } from '../firebase-config';
 import { collection, query, doc, getDoc, orderBy, addDoc, onSnapshot, setDoc } from "firebase/firestore";
+import Spinner from 'react-bootstrap/Spinner'
+import Container from 'react-bootstrap/Container'
+import Navbar from 'react-bootstrap/Navbar'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 export const Group = ({user} : {user:User}) => {
   const navigate = useNavigate();
@@ -91,48 +96,61 @@ export const Group = ({user} : {user:User}) => {
 
   if (loading){
     return (
-      <h1>Loading...</h1>
+      <Spinner animation="border" />
     );
   }
 
   if (!userBelongs) {
     return (
-      <div>
-        <button className="btn btn-blue" onClick={() => navigate('/')}>Back</button>
-        <label>Group access code:
-        <input 
-          className="input-field"
-          type="text" 
-          name="accessCode" 
-          value={accessCode || ""} 
-          onChange={updateAccessCode}
-        />
-        </label>
-        <button className="btn btn-blue" onClick={submitAccessCode}>Submit</button>
-      </div>
+      <Container fluid>
+        <Navbar bg="dark" expand="lg" fixed="top">
+          <button className="btn btn-outline-primary" onClick={() => navigate('/')}>Back</button>
+        </Navbar>
+        <Container style={{paddingTop:'70px'}}>
+          <Form>
+            <Form.Group>
+              <Form.Label>Group access code</Form.Label>
+              <Form.Control
+                type="text"
+                value={accessCode}
+                onChange={updateAccessCode}
+                placeholder="Access Code..."
+              />
+              <Button className="mt-3" variant="primary" onClick={submitAccessCode}>Submit Access Code</Button>
+            </Form.Group>
+          </Form>
+        </Container>
+      </Container>
     );
   }
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">Group {groupName}</h1>
-      <button className="btn btn-blue" onClick={() => navigate('/')}>Back</button>
-      <button className="btn btn-blue" onClick={leaveGroup}>Leave</button>
-      <div>
-        {messages.map((message, index) => (
-          <p key={index}>{message}</p>
-        ))}
-      </div>
-      <label>Send Message:
-      <input 
-        className="input-field"
-        type="text" 
-        name="newMessage" 
-        value={newMessage || ""} 
-        onChange={updateNewMessage}
-      />
-      </label>
-      <button className="btn btn-blue" onClick={submitMessage}>Submit</button>
-    </div>
+    <Container fluid>
+      <Navbar bg="dark" expand="lg" fixed="top">
+        <button className="btn btn-outline-primary" onClick={() => navigate('/')}>Back</button>
+        <Navbar.Brand style={{color:'white'}} className="mx-auto">Group {groupName}</Navbar.Brand>
+        <button className="btn btn-outline-primary" onClick={leaveGroup}>Leave</button>
+      </Navbar>
+      <Container style={{paddingTop:'70px', marginBottom:'200px'}}>
+        <div>
+          {messages.map((message, index) => (
+            <div key={index} className="alert alert-secondary" role="alert">{message}</div>
+          ))}
+        </div>
+      </Container>
+      <Navbar expand="lg" fixed="bottom">
+        <Form className="w-100">
+          <Form.Group style={{display: 'flex'}}>
+            <Form.Control
+              type="text"
+              value={newMessage}
+              onChange={updateNewMessage}
+              placeholder="Message..."
+            />
+            <Button variant="success" size="lg" onClick={submitMessage}>Send</Button>
+          </Form.Group>
+        </Form>
+      </Navbar>
+    </Container>
   )
 }

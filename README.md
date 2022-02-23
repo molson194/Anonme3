@@ -34,9 +34,10 @@ Pivot:
 * ~~Remove updateGroup/groupDetails page~~
 * ~~Add to groupMememberships when joined with code~~
 * ~~Auto add creator as member~~
-* Styling
+* ~~Styling~~
 
 18. Progressive web app offline functionality and firebase caching (only update new messages/groups)
-19. Progressive web app notifications
-20. Github CI/CD (without firebase-config emulators)
-21. React tests
+19. Improve group membership security setup
+20. Progressive web app notifications
+21. Github CI/CD (without firebase-config emulators)
+22. React tests
