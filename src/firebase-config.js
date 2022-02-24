@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
+import { getFirestore, enableIndexedDbPersistence, connectFirestoreEmulator } from 'firebase/firestore'
 
 const config = {
   apiKey: "AIzaSyBgcBZyKU-DMLXEcIC_VRHxLQMTVHyj6aY",
@@ -17,3 +17,11 @@ export const db = getFirestore(app);
 
 connectAuthEmulator(auth, "http://localhost:9099");
 connectFirestoreEmulator(db, 'localhost', 8080);
+
+enableIndexedDbPersistence(db).catch((err) => {
+  if (err.code === 'failed-precondition') {
+    console.log('Multiple tabs open, persistence can only be enabled in one tab')
+  } else if (err.code === 'unimplemented') {
+    console.log('Current browser does not support persistence')
+  }
+});

@@ -36,8 +36,18 @@ Pivot:
 * ~~Auto add creator as member~~
 * ~~Styling~~
 
-18. Progressive web app offline functionality and firebase caching (only update new messages/groups)
-19. Improve group membership security setup
+18. ~~Progressive web app offline functionality and firebase caching (only update new messages/groups)~~
+19. Improve group membership security setup (with functions updating users/{uid} with list of groups)
+
+Improvements
+* Phone number client side validation
+* Loading screen phone input
+* Separate groups and access tokens documents for read permission
+* Loading screen access code validation
+* Limit access code/message length
+* Bottom navbar margin
+* Message censorship
+
 20. Progressive web app notifications
 21. Github CI/CD (without firebase-config emulators)
 22. React tests
